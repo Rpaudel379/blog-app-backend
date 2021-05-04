@@ -15,7 +15,7 @@ app.use(express.json({ limit: "50mb" }));
 // app.use(cookieParser());
 //connection to mongodb
 mongoose
-  .connect(process.env.CONNECTION_URL, { 
+  .connect(process.env.CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
