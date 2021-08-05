@@ -8,4 +8,3 @@ router.post("/addblog", blogControllers.blog_post);
 router.get("/singleblog", blogControllers.singleblog_get);
 router.get("/userBlog", blogControllers.userBlog_get);
 module.exports = router;
- 
