@@ -11,7 +11,6 @@ const { checkUser } = require("./middleware/authMiddleware");
 app.use(
   cors({ origin: "https://mern-blog-app.netlify.app", credentials: true })
 );
-
 app.use(express.json({ limit: "50mb" }));
 // app.use(cookieParser());
 //connection to mongodb
