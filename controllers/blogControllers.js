@@ -28,13 +28,15 @@ module.exports.blog_get = async (req, res) => {
 module.exports.blog_post = async (req, res) => {
   const { title, body, image, userId, name } = req.body;
 
-  try {
+  console.log(req.body.title);
+
+  /*  try {
     const blog = await Blog.create({ title, body, image, userId, name });
     res.status(201).json(blog);
   } catch (err) {
     const errors = handleErrors(err);
     res.status(500).json(errors);
-  }
+  } */
 };
 
 module.exports.singleblog_get = async (req, res) => {

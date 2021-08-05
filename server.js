@@ -5,12 +5,12 @@ const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 require("dotenv").config();
+
 const app = express();
 const { checkUser } = require("./middleware/authMiddleware");
 // middleware
-app.use(
-  cors({ origin: "https://mern-blog-app.netlify.app", credentials: true })
-);
+app.use(cors({ origin: process.env.CORS, credentials: true }));
+
 app.use(express.json({ limit: "50mb" }));
 // app.use(cookieParser());
 //connection to mongodb
