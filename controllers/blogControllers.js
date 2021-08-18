@@ -1,4 +1,7 @@
 const Blog = require("../model/Blog");
+
+const { cloudinary } = require("./cloudinary");
+
 const handleErrors = (err) => {
   //console.log(err.message, err.code, "code");
   let errors = {
@@ -28,9 +31,32 @@ module.exports.blog_get = async (req, res) => {
 module.exports.blog_post = async (req, res) => {
   const { title, body, image, userId, name } = req.body;
 
+  /*  try {
+    const upload = await cloudinary.uploader.upload(image, {
+      upload_preset: "React-blog",
+    });
+
+    console.log(upload);
+  } catch (error) {
+    console.log(error);
+  } */
+
   try {
-    const blog = await Blog.create({ title, body, image, userId, name });
-    res.status(201).json(blog);
+    const upload = await cloudinary.uploader.upload(image, {
+      upload_preset: "React-blog",
+    });
+    const imgUrl = upload.secure_url;
+    const cloudinary_public_id = upload.public_id;
+    await Blog.create({
+      title,
+      body,
+      image: imgUrl,
+      userId,
+      name,
+      cloudinary_public_id,
+    });
+
+    res.status(201).json({ ok: true });
   } catch (err) {
     const errors = handleErrors(err);
     res.status(500).json(errors);

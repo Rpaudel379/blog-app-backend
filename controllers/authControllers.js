@@ -1,5 +1,7 @@
 const User = require("../model/User");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
 //? error handling during signup and signin
 const handleErrors = (err) => {
   //console.log(err.message, err.code, "code");
@@ -33,7 +35,7 @@ const handleErrors = (err) => {
     });
   }
 
-  return errors;   
+  return errors;
 };
 
 //? jwt
@@ -148,4 +150,65 @@ module.exports.logout_post = (req, res) => {
 
 module.exports.valid_get = (req, res) => {
   res.status(200).json(res.locals.user);
+};
+
+module.exports.change_info_post = async (req, res) => {
+  if (res.locals.user.id == req.body.userId) {
+    if (!req.body.type || !req.body.value) {
+      res.status(500).json({ error: "must have type and value" });
+      return;
+    }
+
+    try {
+      const changeType = req.body.type;
+      const changeValue = req.body.value;
+      const userId = req.body.userId;
+
+      // username
+      if (changeType === "username") {
+        await User.updateOne(
+          { _id: userId },
+          {
+            $set: { username: changeValue },
+          },
+          { new: true }
+        );
+        res.status(200).json({ success: "true" });
+        return;
+      }
+
+      // email
+      if (changeType === "email") {
+        await User.updateOne(
+          { _id: userId },
+          {
+            $set: { email: changeValue },
+          },
+          { new: true }
+        );
+        res.status(200).json({ success: "true" });
+        return;
+      }
+
+      // password
+      if (changeType === "password") {
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(changeValue, salt);
+
+        await User.updateOne(
+          { _id: userId },
+          {
+            $set: { password: passwordHash },
+          },
+          { new: true }
+        );
+        res.status(200).json({ success: "true" });
+        return;
+      }
+    } catch (err) {
+      res.status(401).json({ error: "unauthorized user" });
+    }
+  } else {
+    res.status(500).json({ error: "invalid user" });
+  }
 };

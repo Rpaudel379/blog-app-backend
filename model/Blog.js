@@ -26,6 +26,10 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    cloudinary_public_id: {
+      type: String,
+      require: true,
+    },
   },
   { timestamps: true }
 );
